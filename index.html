@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>To-Dos</title>
+    <script src="http://fb.me/react-0.8.0.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.8.0.js"></script>
+  </head>
+
+  <body>
+    <div id="content"></div>
+    <script type="text/jsx">
+    /*** @jsx React.DOM */
+      var ToDoApp = React.createClass({
+
+        render: function(){
+            return (
+                    <div><h1>To-dos:</h1></div>
+                    )
+        }
+      });
+
+      React.renderComponent(<ToDoApp />,document.getElementById("content"))
+    </script>
+
+
+
+  </body>
+</html>
