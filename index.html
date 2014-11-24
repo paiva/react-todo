@@ -20,6 +20,22 @@
         }
       });
 
+      var Item = React.createClass({
+        render: function(){
+            return (
+                    <div><h3>{this.props.item}</h3></div>
+                    )
+        }
+      })
+
+      var ItemList = React.createClass({
+          var item = this.props.data.map(function(item){
+            return <Item item={item}>
+          })
+        }
+
+      })
+
       React.renderComponent(<ToDoApp />,document.getElementById("content"))
     </script>
 
