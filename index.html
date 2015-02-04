@@ -11,66 +11,42 @@
     <script type="text/jsx">
 
     /*** @jsx React.DOM */
+    var TodoList = React.createClass({
+      render: function() {
+        var createItem = function(itemText) {
+          return <li>{itemText}</li>;
+        };
+        return <ul>{this.props.items.map(createItem)}</ul>;
+      }
+    });
     
-      var ToDoApp = React.createClass({
-          getInitialState:function(){
-            return {data:[], first:'', hashtag:''}
-          }, 
-          onChangeFirst:function(e){
-            this.setState({first:e.target.value})
-          },
-          onChangeHashtag:function(e){
-            this.setState({hashtag:e.target.value})
-          },
-          handleSubmit:function(e){
-            e.preventDefaul();
-            this.state.data.push({first:this.state.first, hashtag: this.state.hashtag});
-            this.setState({first:'', hashtag:''})
-
-          },
-          render: function(){
-              return (
-                      <div>
-                        <h1>Things todo today:</h1>
-                        <form onSubmit={this.handleSubmit}>
-                        <input type='text' value={this.state.first} onChange={this.onChangeFirst} />
-                        <input type='text' value={this.state.hashtag} onChange={this.onChangeHashtag} />
-                        <button>Add</button>
-                        </form>
-                        <ItemList data={this.state.data}/>
-                      </div>
-                     )
-        }
-      });
-
-      var List = React.createClass({
-        render: function(){
-            return (
-                    <div>
-                      <h3>{this.props.first}, {this.props.hashtag}</h3>
-                    </div>
-                    )
-        }
-      })
-
-      var ItemList = React.createClass({
-        render: function(){
-
-            var items = this.props.data.map(function(item){
-            return <List first={item.first} hashtag={item.hashtag} />
-            });
-            return (
-                    <div>
-                    {items}
-                    </div> 
-                    )
-        }
-
-      })
-
-
-      React.renderComponent(<ToDoApp />,document.getElementById("content"))
-
+    var TodoApp = React.createClass({
+      getInitialState: function() {
+        return {items: [], text: ''};
+      },
+      onChange: function(e) {
+        this.setState({text: e.target.value});
+      },
+      handleSubmit: function(e) {
+        e.preventDefault();
+        var nextItems = this.state.items.concat([this.state.text]);
+        var nextText = '';
+        this.setState({items: nextItems, text: nextText});
+      },
+      render: function() {
+        return (
+          <div>
+            <h3>Things to do today ({this.state.items.length}):</h3>
+            <form onSubmit={this.handleSubmit}>
+              <input onChange={this.onChange} value={this.state.text} />
+              <button>{'Add #' + (this.state.items.length + 1)}</button>
+            </form>
+            <TodoList items={this.state.items} />
+          </div>
+        );
+      }
+    });
+    React.renderComponent(<TodoApp />,document.getElementById("content"))
     </script>
   </body>
 </html>
