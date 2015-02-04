@@ -13,26 +13,27 @@
     /*** @jsx React.DOM */
     
       var ToDoApp = React.createClass({
-          getInitialState: function(){
-            return {data=[], description='', hashtag:''}
+          getInitialState:function(){
+            return {data:[], first:'', hashtag:''}
           }, 
-          onChangeItem: function(e){
-            this.setState({description:e.target.value})
+          onChangeFirst:function(e){
+            this.setState({first:e.target.value})
           },
-          onChangeHashtag: function(e){
+          onChangeHashtag:function(e){
             this.setState({hashtag:e.target.value})
           },
-          handleSubmit: function(e){
+          handleSubmit:function(e){
             e.preventDefaul();
-            this.state.data.push({description:this.data.description, hashtag: this.data.hashtag});
-            this.setState({description:'', hashtag:''})
+            this.state.data.push({first:this.state.first, hashtag: this.state.hashtag});
+            this.setState({first:'', hashtag:''})
+
           },
           render: function(){
               return (
                       <div>
                         <h1>Things todo today:</h1>
                         <form onSubmit={this.handleSubmit}>
-                        <input type='text' value={this.state.description} onChange={this.onChangeItem} />
+                        <input type='text' value={this.state.first} onChange={this.onChangeFirst} />
                         <input type='text' value={this.state.hashtag} onChange={this.onChangeHashtag} />
                         <button>Add</button>
                         </form>
@@ -46,7 +47,7 @@
         render: function(){
             return (
                     <div>
-                      <h3>{this.props.description}, {this.props.hashtag}</h3>
+                      <h3>{this.props.first}, {this.props.hashtag}</h3>
                     </div>
                     )
         }
@@ -56,7 +57,7 @@
         render: function(){
 
             var items = this.props.data.map(function(item){
-            return <List description={item.description} hashtag={item.hashtag} />
+            return <List first={item.first} hashtag={item.hashtag} />
             });
             return (
                     <div>
