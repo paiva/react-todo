@@ -9,33 +9,66 @@
   <body>
     <div id="content"></div>
     <script type="text/jsx">
-    /*** @jsx React.DOM */
-      var ToDoApp = React.createClass({
 
-        render: function(){
-            return (
-                    <div><h1>To-dos:</h1></div>
-                    )
+    /*** @jsx React.DOM */
+    
+      var ToDoApp = React.createClass({
+          getInitialState: function(){
+            return {data=[], item='',hashtag:''}
+          }, 
+          onChangeItem: function(e){
+            this.setState({item:e.target.value})
+          },
+          onChangeHashtag: function(e){
+            this.setState({item:e.target.value})
+          },
+          handleSubmit: function(e){
+            e.preventDefaul();
+            this.state.data.push({item:this.data.item, hashtag: this.data.hashtag});
+            this.setState({item:'', hashtag:''})
+          },
+          render: function(){
+              return (
+                      <div>
+                        <h1>Things todo today:</h1>
+                        <form onSubmit={this.handleSubmit}>
+                        <input type='text' value={this.state.item} onChange={this.onChangeItem} />
+                        <input type='text' value={this.state.hashtag} onChange={this.onChangeHashtag} />
+                        </form>
+                        <ItemList data={this.state.data}/>
+                      </div>
+                     )
         }
       });
 
-      var Item = React.createClass({
+      var List = React.createClass({
         render: function(){
             return (
-                    <div><h3>{this.props.item}</h3></div>
+                    <div>
+                      <h3>{this.props.first}, {this.props.last}</h3>
+                    </div>
                     )
         }
       })
 
       var ItemList = React.createClass({
-          var item = this.props.data.map(function(item){
-            return <Item item={item}>
-          })
+        render: function(){
+
+            var items = this.props.data.map(function(item){
+            return <List first={item.first} last={item.last} />
+            });
+            return (
+                    <div>
+                    {items}
+                    </div> 
+                    )
         }
 
       })
 
-      React.renderComponent(<ToDoApp />,document.getElementById("content"))
+
+      React.renderComponent(<ToDoApp data={data} />,document.getElementById("content"))
+
     </script>
   </body>
 </html>
