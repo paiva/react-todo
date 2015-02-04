@@ -14,26 +14,27 @@
     
       var ToDoApp = React.createClass({
           getInitialState: function(){
-            return {data=[], item='',hashtag:''}
+            return {data=[], description='', hashtag:''}
           }, 
           onChangeItem: function(e){
-            this.setState({item:e.target.value})
+            this.setState({description:e.target.value})
           },
           onChangeHashtag: function(e){
-            this.setState({item:e.target.value})
+            this.setState({hashtag:e.target.value})
           },
           handleSubmit: function(e){
             e.preventDefaul();
-            this.state.data.push({item:this.data.item, hashtag: this.data.hashtag});
-            this.setState({item:'', hashtag:''})
+            this.state.data.push({description:this.data.description, hashtag: this.data.hashtag});
+            this.setState({description:'', hashtag:''})
           },
           render: function(){
               return (
                       <div>
                         <h1>Things todo today:</h1>
                         <form onSubmit={this.handleSubmit}>
-                        <input type='text' value={this.state.item} onChange={this.onChangeItem} />
+                        <input type='text' value={this.state.description} onChange={this.onChangeItem} />
                         <input type='text' value={this.state.hashtag} onChange={this.onChangeHashtag} />
+                        <button>Add</button>
                         </form>
                         <ItemList data={this.state.data}/>
                       </div>
@@ -45,7 +46,7 @@
         render: function(){
             return (
                     <div>
-                      <h3>{this.props.first}, {this.props.last}</h3>
+                      <h3>{this.props.description}, {this.props.hashtag}</h3>
                     </div>
                     )
         }
@@ -55,7 +56,7 @@
         render: function(){
 
             var items = this.props.data.map(function(item){
-            return <List first={item.first} last={item.last} />
+            return <List description={item.description} hashtag={item.hashtag} />
             });
             return (
                     <div>
@@ -67,7 +68,7 @@
       })
 
 
-      React.renderComponent(<ToDoApp data={data} />,document.getElementById("content"))
+      React.renderComponent(<ToDoApp />,document.getElementById("content"))
 
     </script>
   </body>
