@@ -1,52 +1,90 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>React-ToDos</title>
-    <script src="http://fb.me/react-0.8.0.js"></script>
-    <script src="http://fb.me/JSXTransformer-0.8.0.js"></script>
-  </head>
-  <body>
-    <div id="content"></div>
-    <script type="text/jsx">
+<head>
+	<script src="https://fb.me/react-0.12.2.min.js"></script>
+	<script src="https://fb.me/JSXTransformer-0.12.2.js"></script>
+</head>
+<body>
+	<script type="text/jsx">
 
-    /*** @jsx React.DOM */
-    var TodoList = React.createClass({
-      render: function() {
-        var createItem = function(itemText) {
-          return <li>{itemText}</li>;
-        };
-        return <ul>{this.props.items.map(createItem)}</ul>;
-      }
-    });
-    
+    // Component 1 - TodoApp
     var TodoApp = React.createClass({
-      getInitialState: function() {
-        return {items: [], text: ''};
-      },
-      onChange: function(e) {
-        this.setState({text: e.target.value});
-      },
-      handleSubmit: function(e) {
-        e.preventDefault();
-        var nextItems = this.state.items.concat([this.state.text]);
-        var nextText = '';
-        this.setState({items: nextItems, text: nextText});
-      },
-      render: function() {
-        return (
-          <div>
-            <h3>Things to do today ({this.state.items.length}):</h3>
-            <form onSubmit={this.handleSubmit}>
-              <input onChange={this.onChange} value={this.state.text} />
-              <button>{'Add #' + (this.state.items.length + 1)}</button>
-            </form>
-            <TodoList items={this.state.items} />
-          </div>
-        );
-      }
+  	getInitialState: function(){
+  		return {items: []};
+  	},
+  	updateItems: function(newItem){
+  		var allItems = this.state.items.concat([newItem]);
+  		this.setState({items: allItems});
+  	},
+  	render: function(){
+  		return (
+  			<div>
+  				<TodoBanner/>
+  				<TodoList items={this.state.items}/>
+  				<TodoForm onFormSubmit={this.updateItems}/>
+  			</div>
+  		);
+  	}
     });
-    React.renderComponent(<TodoApp />,document.getElementById("content"))
-    </script>
-  </body>
-</html>
+
+    // Component 2 - TodoBanner
+    var TodoBanner = React.createClass({
+    	render: function(){
+    		return (
+    			<h3>TODO</h3>
+    		);
+    	}
+    });
+
+    // Component 3 - TodoList
+    var TodoList = React.createClass({
+    	render: function() {
+    		var createItem = function(itemText) {
+    			return (
+    				<TodoListItem>{itemText}</TodoListItem>
+    			);
+    		};
+    		return <ul>{this.props.items.map(createItem)}</ul>;
+    	}
+    });
+
+    // Component 4 - TodoListItem
+    var TodoListItem = React.createClass({
+  	   render: function(){
+  		return (
+  			<li>{this.props.children}</li>
+  		);
+  	 }
+    });
+
+    // Component 5 - TodoForm
+    var TodoForm = React.createClass({
+    	getInitialState: function() {
+    		return {item: ''};
+    	},
+    	handleSubmit: function(e){
+    		e.preventDefault();
+    		this.props.onFormSubmit(this.state.item);
+    		this.setState({item: ''});
+    		React.findDOMNode(this.refs.item).focus();
+    		return;
+    	},
+    	onChange: function(e){
+    		this.setState({
+    			item: e.target.value
+    		});
+    	},
+    	render: function(){
+    		return (
+    			<form onSubmit={this.handleSubmit}>
+    				<input type='text' ref='item' onChange={this.onChange} value={this.state.item}/>
+    				<input type='submit' value='Add'/>
+    			</form>
+    		);
+    	}
+    });
+
+
+    React.render(<TodoApp/>, document.body);
+
+
+  </script>
+</body>
